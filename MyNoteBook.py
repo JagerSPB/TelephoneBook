@@ -21,7 +21,7 @@ while True:
                                    "Выход"])
 
     if choice == "Добавить контакт":
-        name = eg.enterbox("Введите имя контакта:")
+        name = eg.enterbox("Введите имя контакта:").strip()
         number = eg.enterbox("Введите тел. номер контакта:")
         email = eg.enterbox("Введите email контакта (по желанию):")
 
@@ -50,11 +50,18 @@ while True:
             contacts_info += "\n"
 
         eg.msgbox(contacts_info)
-
     elif choice == "Найти контакт":
         search_name = eg.enterbox("Введите уникальный идентификатор контакта для поиска:").strip()
         if search_name in phone_book:
-            eg.msgbox(f"Номер телефона для контакта {search_name}: {phone_book[search_name]}")
+            contact_info = phone_book[search_name]
+            info_string = ""
+            info_string += f"ID: {search_name}\n"
+            info_string += f"Имя: {contact_info['name']}\n"
+            info_string += f"Телефон: {contact_info['number']}\n"
+            if 'email' in contact_info:
+                info_string += f"Email: {contact_info['email']}\n"
+
+            eg.msgbox(info_string)
         else:
             eg.msgbox("Контакт не найден.")
 
