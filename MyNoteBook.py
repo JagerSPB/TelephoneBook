@@ -50,6 +50,7 @@ while True:
             contacts_info += "\n"
 
         eg.msgbox(contacts_info)
+
     elif choice == "Найти контакт":
         search_name = eg.enterbox("Введите уникальный идентификатор контакта для поиска:").strip()
         if search_name in phone_book:
