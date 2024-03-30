@@ -38,14 +38,19 @@ while True:
         eg.msgbox(f"Контакт {name} успешно добавлен с id: {contact_id}")
 
     elif choice == "Показать все контакты":
-        if phone_book:
-            contacts_info = "\n".join([f"{name}: {phone_book[name]}" for name in phone_book])
-            eg.msgbox(contacts_info)
-        else:
-            eg.msgbox("Телефонная книга пуста.")
+        contacts_info = ""
+        for contact_id, contact_info in phone_book.items():
+            contacts_info += f"ID: {contact_id}\n"
+            contacts_info += f"Имя: {contact_info['name']}\n"
+            contacts_info += f"Телефон: {contact_info['number']}\n"
+            if 'email' in contact_info:
+                contacts_info += f"Email: {contact_info['email']}\n"
+            contacts_info += "\n"
+
+        eg.msgbox(contacts_info)
 
     elif choice == "Найти контакт":
-        search_name = eg.enterbox("Введите имя контакта для поиска:")
+        search_name = eg.enterbox("Введите уникальный идентификатор контакта для поиска:").strip()
         if search_name in phone_book:
             eg.msgbox(f"Номер телефона для контакта {search_name}: {phone_book[search_name]}")
         else:
