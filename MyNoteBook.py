@@ -22,7 +22,7 @@ while True:
 
     if choice == "Добавить контакт":
         name = eg.enterbox("Введите имя контакта:")
-        number = eg.enterbox("Введите номер контакта:")
+        number = eg.enterbox("Введите тел. номер контакта:")
         email = eg.enterbox("Введите email контакта (по желанию):")
 
         contact = {"name": name, "number": number}
@@ -37,6 +37,13 @@ while True:
 
         eg.msgbox(f"Контакт {name} успешно добавлен с id: {contact_id}")
 
+    elif choice == "Показать все контакты":
+        if phone_book:
+            contacts_info = "\n".join([f"{name}: {phone_book[name]}" for name in phone_book])
+            eg.msgbox(contacts_info)
+        else:
+            eg.msgbox("Телефонная книга пуста.")
+
     elif choice == "Найти контакт":
         search_name = eg.enterbox("Введите имя контакта для поиска:")
         if search_name in phone_book:
@@ -44,12 +51,13 @@ while True:
         else:
             eg.msgbox("Контакт не найден.")
 
-    elif choice == "Показать все контакты":
-        if phone_book:
-            contacts_info = "\n".join([f"{name}: {phone_book[name]}" for name in phone_book])
-            eg.msgbox(contacts_info)
+    elif choice == "Удалить контакт":
+        delete_id = eg.enterbox("Введите уникальный идентификатор контакта для удаления:")
+        if delete_id in phone_book:
+            del phone_book[delete_id]
+            eg.msgbox("Контакт успешно удален.")
         else:
-            eg.msgbox("Телефонная книга пуста.")
+            eg.msgbox("Контакт не найден.")
 
     elif choice == "Выход":
         with open('phone_book.json', 'w') as file:
