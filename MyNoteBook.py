@@ -1,21 +1,40 @@
 import easygui as eg
 import json
 
-
 try:
     with open('phone_book.json', 'r') as file:
         phone_book = json.load(file)
 except FileNotFoundError:
     phone_book = {}
 
+def generate_id():
+    if not phone_book:
+        return 1
+    else:
+        return max([int(key) for key in phone_book.keys()]) + 1
+
+
 while True:
     choice = eg.buttonbox("Выберите действие:", "Телефонная книга",
-                          choices=["Добавить контакт", "Найти контакт", "Показать все контакты", "Выход"])
+                          choices=["Добавить контакт", "Найти контакт", "Показать все контакты", "Удалить контакт",
+                                   "Выход"])
 
     if choice == "Добавить контакт":
         name = eg.enterbox("Введите имя контакта:")
-        number = eg.enterbox("Введите номер телефона контакта:")
-        phone_book[name] = number
+        number = eg.enterbox("Введите номер контакта:")
+        email = eg.enterbox("Введите email контакта (по желанию):")
+
+        contact = {"name": name, "number": number}
+        if email:
+            contact["email"] = email
+
+        contact_id = generate_id()
+        phone_book[str(contact_id)] = contact
+
+        with open('phone_book.json', 'w') as file:
+            json.dump(phone_book, file)
+
+        eg.msgbox(f"Контакт {name} успешно добавлен с id: {contact_id}")
 
     elif choice == "Найти контакт":
         search_name = eg.enterbox("Введите имя контакта для поиска:")
