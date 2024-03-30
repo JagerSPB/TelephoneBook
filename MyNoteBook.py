@@ -7,6 +7,7 @@ try:
 except FileNotFoundError:
     phone_book = {}
 
+
 def generate_id():
     if not phone_book:
         return 1
