@@ -38,6 +38,8 @@ while True:
         eg.msgbox(f"Контакт {name} успешно добавлен с id: {contact_id}")
 
     elif choice == "Показать все контакты":
+        if not phone_book:
+            eg.msgbox("Телефонная книга пуста.")
         contacts_info = ""
         for contact_id, contact_info in phone_book.items():
             contacts_info += f"ID: {contact_id}\n"
