@@ -76,8 +76,7 @@ while True:
 
     elif choice == "Выход":
         with open('phone_book.json', 'w') as file:
-            json.dump(phone_book, file)
-
-        break
+            json.dump(phone_book, file, indent=4)
+            break
 
 eg.msgbox("Спасибо за использование телефонной книги!")
