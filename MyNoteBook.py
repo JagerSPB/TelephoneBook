@@ -1,86 +1,49 @@
 import easygui as eg
 import json
 
-try:
-    with open('phone_book.json', 'r') as file:
-        phone_book = json.load(file)
-except FileNotFoundError:
-    phone_book = {}
+
+def load_phone_book(filename='phone_book.json'):
+    try:
+        with open(filename, 'r') as file:
+            phone_book = json.load(file)
+    except FileNotFoundError:
+        phone_book = {}
+    return phone_book
 
 
-def generate_id():
-    if not phone_book:
-        return 1
-    else:
-        return max([int(key) for key in phone_book.keys()]) + 1
+def save_phone_book(phone_book, filename='phone_book.json'):
+    with open(filename, 'w') as file:
+        json.dump(phone_book, file, indent=4)
+
+
+def add_contact(phone_book):
+    name = eg.enterbox(msg='Введите имя контакта:')
+    number = eg.enterbox(msg='Введите номер телефона контакта:')
+    email = eg.enterbox(msg='Введите email контакта (если есть):')
+    contact_id = str(max([int(x) for x in phone_book.keys()] + [0]) + 1)
+    phone_book[contact_id] = {'name': name, 'number': number, 'email': email}
+
+
+def list_contacts(phone_book):
+    message = '\n'.join([
+        f'ID: {contact_id}, Имя: {details["name"]}, Телефон: {details["number"]}, Email: {details.get("email", "Не указан")}'
+        for contact_id, details in phone_book.items()])
+    eg.msgbox(msg=message, title='Список контактов')
 
 
 def main_menu():
-    # while True:
-    choice = eg.buttonbox("Выберите действие:", "Телефонная книга",
-                          choices=["Добавить контакт", "Найти контакт", "Показать все контакты", "Удалить контакт",
-                                   "Выход"])
-
-    if choice == "Добавить контакт":
-        name = eg.enterbox("Введите имя контакта:").strip()
-        number = eg.enterbox("Введите тел. номер контакта:")
-        email = eg.enterbox("Введите email контакта (по желанию):")
-
-        contact = {"name": name, "number": number}
-        if email:
-            contact["email"] = email
-
-        contact_id = generate_id()
-        phone_book[str(contact_id)] = contact
-
-        with open('phone_book.json', 'w') as file:
-            json.dump(phone_book, file)
-
-        eg.msgbox(f"Контакт {name} успешно добавлен с id: {contact_id}")
-
-    elif choice == "Показать все контакты":
-        if not phone_book:
-            eg.msgbox("Телефонная книга пуста.")
-        contacts_info = ""
-        for contact_id, contact_info in phone_book.items():
-            contacts_info += f"ID: {contact_id}\n"
-            contacts_info += f"Имя: {contact_info['name']}\n"
-            contacts_info += f"Телефон: {contact_info['number']}\n"
-            if 'email' in contact_info:
-                contacts_info += f"Email: {contact_info['email']}\n"
-            contacts_info += "\n"
-
-        eg.msgbox(contacts_info)
-
-    elif choice == "Найти контакт":
-        search_name = eg.enterbox("Введите уникальный идентификатор контакта для поиска:").strip()
-        if search_name in phone_book:
-            contact_info = phone_book[search_name]
-            info_string = ""
-            info_string += f"ID: {search_name}\n"
-            info_string += f"Имя: {contact_info['name']}\n"
-            info_string += f"Телефон: {contact_info['number']}\n"
-            if 'email' in contact_info:
-                info_string += f"Email: {contact_info['email']}\n"
-
-            eg.msgbox(info_string)
-        else:
-            eg.msgbox("Контакт не найден.")
-
-    elif choice == "Удалить контакт":
-        delete_id = eg.enterbox("Введите уникальный идентификатор контакта для удаления:")
-        if delete_id in phone_book:
-            del phone_book[delete_id]
-            eg.msgbox("Контакт успешно удален.")
-        else:
-            eg.msgbox("Контакт не найден.")
-
-    elif choice == "Выход":
-        with open('phone_book.json', 'w') as file:
-            json.dump(phone_book, file, indent=4)
-            # break
+    phone_book = load_phone_book()
+    while True:
+        choice = eg.choicebox(msg='Выберите действие:',
+                              choices=['Добавить контакт', 'Показать контакты', 'Сохранить и выйти'])
+        if choice == 'Добавить контакт':
+            add_contact(phone_book)
+        elif choice == 'Показать контакты':
+            list_contacts(phone_book)
+        elif choice == 'Сохранить и выйти':
+            save_phone_book(phone_book)
+            break
 
 
-eg.msgbox("Спасибо за использование телефонной книги!")
 if __name__ == '__main__':
     main_menu()
