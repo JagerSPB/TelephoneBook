@@ -24,22 +24,15 @@ def add_contact(phone_book):
     phone_book[contact_id] = {'name': name, 'number': number, 'email': email}
 
 
-def list_contacts(phone_book):
-    message = '\n'.join([
-        f'ID: {contact_id}, Имя: {details["name"]}, Телефон: {details["number"]}, Email: {details.get("email", "Не указан")}'
-        for contact_id, details in phone_book.items()])
-    eg.msgbox(msg=message, title='Список контактов')
 
 
 def main_menu():
     phone_book = load_phone_book()
     while True:
         choice = eg.choicebox(msg='Выберите действие:',
-                              choices=['Добавить контакт', 'Показать контакты', 'Сохранить и выйти'])
+                              choices=['Добавить контакт', 'Сохранить и выйти'])
         if choice == 'Добавить контакт':
             add_contact(phone_book)
-        elif choice == 'Показать контакты':
-            list_contacts(phone_book)
         elif choice == 'Сохранить и выйти':
             save_phone_book(phone_book)
             break
