@@ -15,7 +15,8 @@ def generate_id():
         return max([int(key) for key in phone_book.keys()]) + 1
 
 
-while True:
+def main_menu():
+    # while True:
     choice = eg.buttonbox("Выберите действие:", "Телефонная книга",
                           choices=["Добавить контакт", "Найти контакт", "Показать все контакты", "Удалить контакт",
                                    "Выход"])
@@ -77,6 +78,9 @@ while True:
     elif choice == "Выход":
         with open('phone_book.json', 'w') as file:
             json.dump(phone_book, file, indent=4)
-            break
+            # break
+
 
 eg.msgbox("Спасибо за использование телефонной книги!")
+if __name__ == '__main__':
+    main_menu()
